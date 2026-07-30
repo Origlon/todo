@@ -1,17 +1,22 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useState, } from "react";
+import { useState } from "react";
 
+const getDataFromLocal = () => {
+  const todos =
+    typeof window !== "undefined" ? localStorage.getItem("todos") : null;
+  if (todos) {
+    return JSON.parse(savedTodos);
+  } else {
+    [];
+  }
+};
 export default function Home() {
   const [state, setState] = useState("");
   //local storage
- const [todos, setTodos] = useState(() => {
-  const savedTodos = localStorage.getItem("todos");
+  const [todos, setTodos] = useState(getDataFromLocal());
 
-  return savedTodos ? JSON.parse(savedTodos) : [];
-});
-  
   const [inputValue, setInputValue] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -38,32 +43,27 @@ export default function Home() {
   };
 
   const handleToggle = (id) => {
-  const updatedTodos = todos.map((todo) =>
-    todo.id === id
-      ? { ...todo, isDone: !todo.isDone }
-      : todo
-  );
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo,
+    );
 
-  setTodos(updatedTodos);
-  localStorage.setItem("todos", JSON.stringify(updatedTodos));
-};
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  };
 
   const handleDelete = (id) => {
-  const updatedTodos = todos.filter(
-    (todo) => todo.id !== id
-  );
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
 
-  setTodos(updatedTodos);
-  localStorage.setItem("todos", JSON.stringify(updatedTodos));
-};
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  };
 
   const deleteCompletedTasks = () => {
+    const updatedTodos = todos.filter((todo) => !todo.isDone);
 
-   const updatedTodos =todos.filter((todo) => !todo.isDone);
-  
-  setTodos(updatedTodos);
-  localStorage.setItem("todos", JSON.stringify(updatedTodos));
-  }
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  };
 
   const filteredTodos =
     state === "Active"
