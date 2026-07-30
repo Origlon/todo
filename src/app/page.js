@@ -72,9 +72,9 @@ export default function Home() {
         ? todos.filter((todo) => todo.isDone)
         : todos;
 
-  const totalTasks = todos.length;
+  const totalTasks = todos?.length;
 
-  const completedTasks = todos.filter((todo) => todo.isDone).length;
+  const completedTasks = todos.filter((todo) => todo.isDone)?.length;
 
   return (
     <main className={styles.page}>
