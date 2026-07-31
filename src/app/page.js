@@ -129,7 +129,7 @@ export default function Home() {
           {filteredTodos?.length === 0 ? (
             <p className={styles.notask}>
               {todos?.length === 0
-                ? "No tasks added yet, Add one above"
+                ? "No tasks yet, Add one above!"
                 : "No matching tasks"}
             </p>
           ) : (
@@ -150,7 +150,7 @@ export default function Home() {
                 <button
                   className={styles.delete}
                   onClick={() => {
-                    if (window.confirm("Ust gah u?")) {
+                    if (window.confirm("Are you sure you want to delete this task?")) {
                       handleDelete(todo.id);
                     }
                   }}
@@ -184,6 +184,10 @@ export default function Home() {
             </button>
           </div>
         )}
+        <div className={styles.footer}>
+          <p>Powered by</p>
+          <p className={styles.pineconetext}>Pinecone Academy</p>
+        </div>
       </div>
     </main>
   );
