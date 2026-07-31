@@ -5,11 +5,11 @@ import { useState } from "react";
 
 const getDataFromLocal = () => {
   const todos =
-    typeof window !== "undefined" ? localStorage.getItem("todos") : null;
+    typeof window !== "undefined" ? localStorage.getItem("todos") : undefined;
   if (todos) {
-    return JSON.parse(savedTodos);
+    return JSON.parse(todos);
   } else {
-    [];
+    return [];
   }
 };
 export default function Home() {
@@ -126,9 +126,9 @@ export default function Home() {
         </div>
 
         <div className={styles.tasksContainer}>
-          {filteredTodos.length === 0 ? (
+          {filteredTodos?.length === 0 ? (
             <p className={styles.notask}>
-              {todos.length === 0
+              {todos?.length === 0
                 ? "No tasks added yet, Add one above"
                 : "No matching tasks"}
             </p>
@@ -162,7 +162,7 @@ export default function Home() {
           )}
         </div>
 
-        {todos.length > 0 && (
+        {todos?.length > 0 && (
           <div className={styles.stats}>
             <p>
               {completedTasks} of {totalTasks} tasks completed
