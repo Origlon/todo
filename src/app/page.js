@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import { useState } from "react";
-
+import { TodoButton } from "./components/todo-button";
 const getDataFromLocal = () => {
   const todos =
     typeof window !== "undefined" ? localStorage.getItem("todos") : undefined;
@@ -68,13 +68,26 @@ export default function Home() {
   const filteredTodos =
     state === "Active"
       ? todos.filter((todo) => !todo.isDone)
-      : state === "Complete"
+      : state === "Completed"
         ? todos.filter((todo) => todo.isDone)
         : todos;
 
   const totalTasks = todos?.length;
 
   const completedTasks = todos.filter((todo) => todo.isDone)?.length;
+  const [editingId, setEditingId] = useState(null);
+  const [editValue, setEditValue] = useState("");
+  const handleEdit = (id) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, title: editValue.trim() } : todo,
+    );
+
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+
+    setEditingId(null);
+    setEditValue("");
+  };
 
   return (
     <main className={styles.page}>
@@ -97,32 +110,49 @@ export default function Home() {
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
 
         <div className={styles.filter}>
-          <button
+          {/* <button
             className={`${styles.all} ${
               state === "" || state === "All" ? styles.selected : ""
             }`}
             onClick={() => setState("All")}
           >
             All
-          </button>
+          </button> */}
+          <TodoButton
+            onClick={() => setState("All")}
+            text="All"
+            stateValue={state}
+            className={styles.all}
+          />
 
-          <button
+          {/* <button
             className={`${styles.active} ${
               state === "Active" ? styles.selected : ""
             }`}
             onClick={() => setState("Active")}
           >
             Active
-          </button>
-
-          <button
+          </button> */}
+          <TodoButton
+            onClick={() => setState("Active")}
+            text="Active"
+            stateValue={state}
+            className={styles.active}
+          />
+          <TodoButton
+            onClick={() => setState("Completed")}
+            text="Completed"
+            stateValue={state}
+            className={styles.completed}
+          />
+          {/* <button
             className={`${styles.completed} ${
               state === "Complete" ? styles.selected : ""
             }`}
             onClick={() => setState("Complete")}
           >
             Completed
-          </button>
+          </button> */}
         </div>
 
         <div className={styles.tasksContainer}>
@@ -142,15 +172,45 @@ export default function Home() {
                     onChange={() => handleToggle(todo.id)}
                   />
 
-                  <span className={todo.isDone ? styles.completedText : ""}>
-                    {todo.title}
-                  </span>
+                  {editingId === todo.id ? (
+                    <input
+                      value={editValue}
+                      autoFocus
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={() => handleEdit(todo.id)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleEdit(todo.id);
+                        }
+
+                        if (e.key === "Escape") {
+                          setEditingId(null);
+                          setEditValue("");
+                        }
+                      }}
+                    />
+                  ) : (
+                    <span
+                      className={todo.isDone ? styles.completedText : ""}
+                      onClick={() => {
+                        setEditingId(todo.id);
+                        setEditValue(todo.title);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {todo.title}
+                    </span>
+                  )}
                 </div>
 
                 <button
                   className={styles.delete}
                   onClick={() => {
-                    if (window.confirm("Are you sure you want to delete this task?")) {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to delete this task?",
+                      )
+                    ) {
                       handleDelete(todo.id);
                     }
                   }}
