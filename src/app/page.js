@@ -75,19 +75,19 @@ export default function Home() {
   const totalTasks = todos?.length;
 
   const completedTasks = todos.filter((todo) => todo.isDone)?.length;
-  const [editingId, setEditingId] = useState(null);
-  const [editValue, setEditValue] = useState("");
-  const handleEdit = (id) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, title: editValue.trim() } : todo,
-    );
+  // const [editingId, setEditingId] = useState(null);
+  // const [editValue, setEditValue] = useState("");
+  // const handleEdit = (id) => {
+  //   const updatedTodos = todos.map((todo) =>
+  //     todo.id === id ? { ...todo, title: editValue.trim() } : todo,
+  //   );
 
-    setTodos(updatedTodos);
-    localStorage.setItem("todos", JSON.stringify(updatedTodos));
+  //   setTodos(updatedTodos);
+  //   localStorage.setItem("todos", JSON.stringify(updatedTodos));
 
-    setEditingId(null);
-    setEditValue("");
-  };
+  //   setEditingId(null);
+  //   setEditValue("");
+  // };
 
   return (
     <main className={styles.page}>
@@ -151,7 +151,7 @@ export default function Home() {
             }`}
             onClick={() => setState("Complete")}
           >
-            Completed
+            Completed``
           </button> */}
         </div>
 
@@ -172,35 +172,9 @@ export default function Home() {
                     onChange={() => handleToggle(todo.id)}
                   />
 
-                  {editingId === todo.id ? (
-                    <input
-                      value={editValue}
-                      autoFocus
-                      onChange={(e) => setEditValue(e.target.value)}
-                      onBlur={() => handleEdit(todo.id)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          handleEdit(todo.id);
-                        }
-
-                        if (e.key === "Escape") {
-                          setEditingId(null);
-                          setEditValue("");
-                        }
-                      }}
-                    />
-                  ) : (
-                    <span
-                      className={todo.isDone ? styles.completedText : ""}
-                      onClick={() => {
-                        setEditingId(todo.id);
-                        setEditValue(todo.title);
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {todo.title}
-                    </span>
-                  )}
+                  <span className={todo.isDone ? styles.completedText : ""}>
+                    {todo.title}
+                  </span>
                 </div>
 
                 <button
