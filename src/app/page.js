@@ -3,6 +3,7 @@
 import styles from "./page.module.css";
 import { useState } from "react";
 import { TodoButton } from "./components/todo-button";
+import { TodoActionButton } from "./components/todo-action-button";
 const getDataFromLocal = () => {
   const todos =
     typeof window !== "undefined" ? localStorage.getItem("todos") : undefined;
@@ -34,7 +35,7 @@ export default function Home() {
       isDone: false,
     };
 
-    const updatedTodos = [...todos, newTodo];
+    const updatedTodos = [newTodo, ...todos];
 
     setTodos(updatedTodos);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
@@ -101,10 +102,15 @@ export default function Home() {
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Add a new task..."
           />
-
-          <button className={styles.add} type="submit">
+          <TodoActionButton
+            text="Add"
+            className={styles.add}
+            onClick={handleAddButton}
+            disabled={inputValue.trim() === ""}
+          />
+          {/* <button className={styles.add} type="submit">
             Add
-          </button>
+          </button> */}
         </form>
 
         {errorMessage && <p className={styles.error}>{errorMessage}</p>}
@@ -176,8 +182,20 @@ export default function Home() {
                     {todo.title}
                   </span>
                 </div>
-
-                <button
+                <TodoActionButton
+                  text="Delete"
+                  className={styles.delete}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to delete this task?",
+                      )
+                    ) {
+                      handleDelete(todo.id);
+                    }
+                  }}
+                />
+                {/* <button
                   className={styles.delete}
                   onClick={() => {
                     if (
@@ -190,7 +208,7 @@ export default function Home() {
                   }}
                 >
                   Delete
-                </button>
+                </button> */}
               </div>
             ))
           )}
