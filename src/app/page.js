@@ -214,28 +214,31 @@ export default function Home() {
           )}
         </div>
 
-        {todos?.length > 0 && (
+        {todos.length > 0 && (
           <div className={styles.stats}>
             <p>
               {completedTasks} of {totalTasks} tasks completed
             </p>
 
-            <button
-              className={styles.clear}
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Are you sure you want to clear all completed tasks?",
-                  )
-                ) {
-                  deleteCompletedTasks();
-                }
-              }}
-            >
-              Clear Completed
-            </button>
+            {completedTasks > 0 && (
+              <button
+                className={styles.clear}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure you want to clear all completed tasks?",
+                    )
+                  ) {
+                    deleteCompletedTasks();
+                  }
+                }}
+              >
+                Clear Completed
+              </button>
+            )}
           </div>
         )}
+
         <div className={styles.footer}>
           <p>Powered by</p>
           <p className={styles.pineconetext}>Pinecone Academy</p>
